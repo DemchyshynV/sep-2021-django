@@ -15,7 +15,9 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
+from hw1.views import Hw1View
 
 urlpatterns = [
     # path('admin/', admin.site.urls),
+    path('hw1', Hw1View.as_view())
 ]
