@@ -1,22 +1,31 @@
 from rest_framework.generics import ListAPIView, RetrieveUpdateDestroyAPIView
 from rest_framework.permissions import AllowAny, IsAdminUser, IsAuthenticated, IsAuthenticatedOrReadOnly
 
+from .filters import CarFilter
 from .models import CarModel
 from .serializers import CarSerializer
 
 
 class CarListCreateView(ListAPIView):
+    """
+    Get all cars with filters
+    """
     permission_classes = (IsAuthenticatedOrReadOnly,)
+    queryset = CarModel.objects.all()
     serializer_class = CarSerializer
-
-    def get_queryset(self):
-        qs = CarModel.objects.all()
-        price_lt = self.request.query_params.get('price_lt', None)
-        if price_lt:
-            qs = qs.filter(price__lt=price_lt)
-        return qs
+    filterset_class = CarFilter
 
 
 class ReadUpdateDeleteView(RetrieveUpdateDestroyAPIView):
+    """
+    get:
+        Get Car by id
+    put:
+        Update car by id
+    patch:
+        Partial update car by id
+    delete:
+        Delete car by id
+    """
     queryset = CarModel.objects.all()
     serializer_class = CarSerializer
